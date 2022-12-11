@@ -1,0 +1,109 @@
+09:08:09 De  OMAR MENDOZA GONZALEZ  a  Todos:
+	//Generar un arreglo por cada ciudad que contenga los alumnos de esa ciudad
+	db.alumnos.aggregate([    
+	    {$group:{ 
+	            _id: "$ciudad",
+	            alumnos:{ $push:{ $concat:["$nombre", " ", "$ap_paterno", " ", "$ap_materno"] } }
+	        }
+	    },
+	    {$project:{ ciudad:"$_id", alumnos:"$alumnos", _id:0}},
+	    {$sort:{ ciudad:1}}
+	])
+09:26:02 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	no tengo el campo evaluaciones
+09:27:24 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	no
+09:27:28 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	le di un find general
+09:27:31 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	y no lo tengo
+09:28:09 De  OMAR ALEJANDRO GARCIA RODRIGUEZ  a  Todos:
+	te hara falta codigo de ayer tal vez, a mi tambien porque tuve examen y llegue tarde
+09:28:12 De  OMAR ALEJANDRO GARCIA RODRIGUEZ  a  Todos:
+	paselo porfa profe
+09:29:03 De  OMAR MENDOZA GONZALEZ  a  Todos:
+	db.getCollection('alumnos').find({evaluaciones:{$exists:1}}).toArray()
+09:29:21 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	si me da resultado
+09:29:36 De  OMAR MENDOZA GONZALEZ  a  Todos:
+	db.alumnos.aggregate([ 
+	    {$match:{
+	            $and:[{ ciudad:{$in:[/QUER/i, /QRO/i]}}, {sexo:"F"}, {evaluaciones:{$exists:1}}]
+	        }
+	    },
+	    {$project:{
+	            _id: 0,
+	            alumno:{ $concat:["$nombre", " ", "$ap_paterno", " ", "$ap_materno"] },
+	            evaluaciones:{
+	                $filter:{
+	                    input:"$evaluaciones",
+	                    as:"eval",
+	                    cond:{ $gte:["$$eval.calificacion", 9] }
+	                }
+	            }
+	        }
+	    }
+	])
+09:30:22 De  OMAR MENDOZA GONZALEZ  a  Todos:
+	db.alumnos.aggregate([
+	{ $unwind:"$evaluaciones" },
+	{
+	    $group:{ _id:{ alumno:{$concat: ["$nombre"," ","$ap_paterno"," ","$ap_materno"] } },
+	    promedio:{ $avg:"$evaluaciones.calificacion"}
+	    }
+	}
+	])
+09:30:40 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	ya quedo
+09:33:52 De  Iván Alexis Gallegos Ramírez  a  Todos:
+	Perdón profesor, debo desconectarme un momento... el deber llamar :(
+09:39:58 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	puede mostrar todo el aggregate?
+09:44:31 De  OMAR MENDOZA GONZALEZ  a  Todos:
+	db.alumnos.aggregate([
+	    {
+	        $project:{ _id:0,  alumno:{$concat: ["$nombre"," ","$ap_paterno"," ","$ap_materno"] }
+	       
+	        }
+	    }        
+	])
+09:53:37 De  GRISELDA AMAIRANI MONTAÑEZ VAZQUEZ  a  Todos:
+	Presente
+09:53:39 De  ALAN DIDIER CHAVEZ PANIAGUA  a  Todos:
+	presente
+09:53:41 De  Marin Solano Luis Andres  a  Todos:
+	presente
+09:53:41 De  ZABDIEL EMILIO MORENO MENDOZA  a  Todos:
+	Presente
+09:53:41 De  ALDO BARRIOS GARCIA  a  Todos:
+	presente
+09:53:42 De  ANA GUADALUPE CARRILLO GALVEZ  a  Todos:
+	presente
+09:53:42 De  MAGALI MONTSERRAT LIMA CORDOVA  a  Todos:
+	presente
+09:53:43 De  Raymundo Nava Vargas  a  Todos:
+	Presente
+09:53:43 De  Sebastian Mendoza Rosas  a  Todos:
+	Presente
+09:53:44 De  OMAR ALEJANDRO GARCIA RODRIGUEZ  a  Todos:
+	Presente
+09:53:44 De  KURT AXEL RUIZ AYALA  a  Todos:
+	Presente
+09:53:45 De  ADOLFO IVAN GUZMAN OJEDA  a  Todos:
+	Presente
+09:53:45 De  JONATHAN OVANDO SANCHEZ  a  Todos:
+	Presente
+09:53:45 De  Mario Iberri Gutierrez  a  Todos:
+	Presente
+09:53:48 De  BRANDON AVENDAÑO VILLEGAS  a  Todos:
+	PRESENTE!
+09:53:50 De  Maria Guadalupe Hernández Ramírez  a  Todos:
+	presente
+09:53:54 De  LUIS RUBEN SOSA DELGADILLO  a  Todos:
+	Presente
+09:53:55 De  Daniel Raul Gudiño  a  Todos:
+	presente
+09:55:46 De  OMAR MENDOZA GONZALEZ  a  Todos:
+	FMongo_Omar_Mendoza_Gonzalez.js
+09:58:13 De  OMAR MENDOZA GONZALEZ  a  Todos:
+	https://pastebin.com/p8Y5KaVd
